@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "119af4e2-95d0-4a80-a2ed-258d908d518a": {
+      "ProjectGuid": "119af4e2-95d0-4a80-a2ed-258d908d518a",
+      "DisplayName": "DevOpsHistory",
+      "ColorIndex": 0
+    },
+    "69b8cf34-b8c3-4cc2-896a-0ada327d80e5": {
+      "ProjectGuid": "69b8cf34-b8c3-4cc2-896a-0ada327d80e5",
+      "DisplayName": "CommonLib",
+      "ColorIndex": 1
+    },
+    "fc44ceef-b07a-4f67-b3f5-3c24133169df": {
+      "ProjectGuid": "fc44ceef-b07a-4f67-b3f5-3c24133169df",
+      "DisplayName": "WorkItemScanner",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}

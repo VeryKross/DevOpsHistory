@@ -1,0 +1,4 @@
+C:\Users\ken\source\repos\AzureApiTest\AzureApiTest\bin\Release\publish\DevOpsHistory.pdb
+C:\Users\ken\source\repos\AzureApiTest\AzureApiTest\bin\Release\publish\sni.dll
+C:\Users\ken\source\repos\AzureApiTest\AzureApiTest\bin\Release\publish\CommonLib.pdb
+C:\Users\ken\source\repos\AzureApiTest\AzureApiTest\bin\Release\publish\DevOpsHistory.exe

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "DevOpsHistory": {
+      "commandName": "Project"
+    },
+    "DevOpsHistory - Clear Pat": {
+      "commandName": "Project",
+      "commandLineArgs": "clear pat"
+    }
+  }
+}
