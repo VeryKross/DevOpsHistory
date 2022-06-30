@@ -17,7 +17,7 @@ namespace CommonLib
         private const string ChangedDateField = "System.ChangedDate";
         private const string EmptyValueIndicator = "*empty*";
 
-        private Dictionary<string, string> _masterKeys;
+        private readonly Dictionary<string, string> _masterKeys;
         private readonly List<string> _skipKeys;
 
         private bool _valueTracking = false;
@@ -47,6 +47,7 @@ namespace CommonLib
         /// </summary>
         /// <param name="writeDetail">If TRUE, a text file will be created with the details from each revision.</param>
         /// <param name="detailPath">Folder to write the revision detail files to.</param>
+        /// <param name="trackField">Option field name to limiting change tracking to a single named field.</param>
         /// <returns>List of key/value pairs with field names and values representing changes in each revision.</returns>
         public List<(string Key, string Value)> GetChangeHistory(bool writeDetail = false, string detailPath = "", string trackField = "")
         {
@@ -68,7 +69,7 @@ namespace CommonLib
             {
                 if (writeDetail && !detailPath.IsNullOrEmpty())
                 {
-                    WriteRevision(revisionItem, detailPath);
+                    WriteRevision(revisionItem, detailPath, 100);
                 }
 
                 var revHeading = new List<(string Key, string Value)>();
@@ -131,7 +132,7 @@ namespace CommonLib
 
                     var oldVal = _masterKeys[field.Key];
 
-                    if (!_skipKeys.Contains(field.Key))//&& _masterKeys.TryGetValue(field.Key, out var oldVal))
+                    if (!_skipKeys.Contains(field.Key))
                     {
                         if (oldVal != newVal)
                         {
@@ -140,7 +141,6 @@ namespace CommonLib
 
                             if (!_valueTracking)
                             {
-                                //result.Add(new ($"Old: {field.Key}", oldVal));
                                 if (includeOldValue)
                                 {
                                     result.Add(new($"{field.Key}", $"{outNew} [{outOld}]"));
@@ -232,12 +232,6 @@ namespace CommonLib
                 Console.WriteLine();
                 Console.WriteLine($"Exception in RetrieveHistory: {e.Message}");
                 Console.WriteLine();
-                //var errWork = new WorkItem();
-                //errWork.Fields = new Dictionary<string, object>
-                //{
-                //    { "error", e.Message }
-                //};
-                //allRevisionItems.Add(errWork);
             }
 
             Console.WriteLine("done.");
@@ -251,30 +245,25 @@ namespace CommonLib
         /// </summary>
         /// <param name="workItem">This represents the state of a work item at a revision point, including all fields.</param>
         /// <param name="folderName">This is the name of the folder to write the output file to.</param>
-        private void WriteRevision(WorkItem workItem, string folderName)
+        /// <param name="lengthLimit">An optional maximum value length after which it will be truncated on output.</param>
+        private void WriteRevision(WorkItem workItem, string folderName, int lengthLimit = 0)
         {
             var fileName = Path.Combine(folderName, $"{WorkItemId}-{workItem.Rev}_Details.txt");
             using (var writer = new StreamWriter(fileName))
             {
-                // List of keys that typically have very long string content and limited value in outputting.
-                List<string> skipKeys = new List<string>()
-                {
-                    "Custom.AssessmentOutcomeReason", "Custom.ModernizationStatusNotes", "System.History", "System.Description", "Custom.OptimizationStatusNotes", "Custom.ProgressNotes"
-                };
-
                 writer.WriteLine($"Detail output for work item ID {WorkItemId}, revision {workItem.Rev}");
                 writer.WriteLine(new string('=', 80));
 
                 foreach (var valuePair in workItem.Fields)
                 {
-                    if (!skipKeys.Contains(valuePair.Key))
+                    // For fields with a value that exceeds the specified length limit, the value it truncated and appended to indicate the extra text has been skipped.
+                    if (lengthLimit > 0 && valuePair.Value.ToString()!.Length > lengthLimit)
                     {
-                        writer.WriteLine($"{valuePair.Key}: {valuePair.Value}");
+                        writer.WriteLine($"{valuePair.Key}: {valuePair.Value.ToString()?[..lengthLimit]}...long text skipped...");
                     }
                     else
                     {
-                        // Don't output these long string, just indicate that a value was present
-                        writer.WriteLine($"{valuePair.Key}: ...long text skipped...");
+                        writer.WriteLine(valuePair.Key == "" ? valuePair.Value : $"{valuePair.Key}: {valuePair.Value}");
                     }
                 }
             }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GAdlZc473DEyF9Hx1ZZ/QcMykIhI6eqWtjmdZdRuN5GJK7bXfgOQe7SAk9OVR9+Kft66BNcrOlT/+an49nRLDg==",
+  "dgSpecHash": "TspC4VnEzFcS7H4aNj7UbPoTpFYgN+RsJAf0HOdlpWk4BwWXEkTM0HyXglcc+f0tige6uAu1W77OdR73dN0/Gg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ken\\source\\repos\\AzureApiTest\\CommonLib\\CommonLib.csproj",
+  "projectFilePath": "C:\\Users\\ken\\source\\repos\\DevOpsHistory\\CommonLib\\CommonLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ken\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.7\\microsoft.aspnet.webapi.client.5.2.7.nupkg.sha512",
     "C:\\Users\\ken\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",

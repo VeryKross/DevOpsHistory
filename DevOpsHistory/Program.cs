@@ -17,7 +17,7 @@ namespace AzureApiTest
 
         static void Main(string[] args)
         {
-            Console.WriteLine($"DevOps History Reporter v1.5");
+            Console.WriteLine($"DevOps History Reporter v1.6");
             Console.WriteLine("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
             Console.WriteLine("");
 
@@ -174,16 +174,18 @@ namespace AzureApiTest
 
             var changes = histDude.GetChangeHistory();
 
-            WriteList($@"{filePath}\{taskId}-Changes.txt", changes, taskId);
+            // Specify a length limit of 60 characters for output values.
+            WriteList($@"{filePath}\{taskId}-Changes.txt", changes, taskId, 100);
         }
-        
+
         /// <summary>
         /// Write the formatted history scan results to the specified output file.
         /// </summary>
         /// <param name="fileName">The name of the file to create.</param>
         /// <param name="listData">The list of key-value pairs representing the history scan results.</param>
         /// <param name="workItemId">The ID of the work item this scan is for.</param>
-        public static void WriteList(string fileName, List<(string Key, string Value)> listData, int workItemId)
+        /// <param name="lengthLimit">An optional maximum value length after which it will be truncated on output.</param>
+        public static void WriteList(string fileName, List<(string Key, string Value)> listData, int workItemId, int lengthLimit = 0)
         {
             using (var writer = new StreamWriter(fileName))
             {
@@ -192,26 +194,21 @@ namespace AzureApiTest
                     ? TimeZoneInfo.Local.DaylightName
                     : TimeZoneInfo.Local.StandardName;
 
-                // List of keys that typically have very long string content and limited value in outputting.
-                List<string> skipKeys = new List<string>()
-                {
-                    "Custom.AssessmentOutcomeReason", "Custom.ModernizationStatusNotes", "System.History", "System.Description", "Custom.OptimizationStatusNotes", "Custom.ProgressNotes"
-                };
-
                 writer.WriteLine($"History as of {theTime.ToString(CultureInfo.CurrentCulture)} ({timeZone}) for ID {workItemId}");
                 writer.WriteLine("Values in [brackets] represent the value prior to this revision.");
                 writer.WriteLine(new string(':', 80));
 
                 foreach (var valuePair in listData)
                 {
-                    if (!skipKeys.Contains(valuePair.Key))
+
+                    // For fields with a value that exceeds the specified length limit, the value it truncated and appended to indicate the extra text has been skipped.
+                    if (lengthLimit > 0 && valuePair.Value.Length > lengthLimit)
                     {
-                        writer.WriteLine(valuePair.Key == "" ? valuePair.Value : $"{valuePair.Key}: {valuePair.Value}");
+                        writer.WriteLine($"{valuePair.Key}: {valuePair.Value.Substring(0, lengthLimit)}...long text skipped...");
                     }
                     else
                     {
-                        // Don't output these long strings, just indicate that a value was present (otherwise it makes reading the rest of the history difficult)
-                        writer.WriteLine($"{valuePair.Key}: ...long text skipped...");
+                        writer.WriteLine(valuePair.Key == "" ? valuePair.Value : $"{valuePair.Key}: {valuePair.Value}");
                     }
                 }
             }
