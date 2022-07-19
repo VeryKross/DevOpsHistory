@@ -10,4 +10,4 @@ When running the DevOpsHistory application for the first time, it will ask the u
 
 For each of the above, you'll be given the option to save the setting so that you don't have to supply it on subsequent runs. For any of these values that you don't save, it will ask you to provide it next time. If, on the other hand, you do save everything and then later need to make a change (e.g. your PAT expires or you want to change folders), just execute the utility from Windows Terminal or a command window with "clear" on the command line (e.g. "DevOpsHistory clear"). This will clear all previously stored values and ask you to supply them again.
 
-<b>Note:</b> The PAT you supply will need to have Read access to the ADO Org Work Items that you want to search. The output folder will be creted if it doesn't already exist.
+<b>Note:</b> The PAT you supply will need to have Read access to the ADO Org Work Items that you want to search. The output folder will be created if it doesn't already exist.
